@@ -20,3 +20,4 @@ def move_machine(request):
     # machine.write('G0 X0 Y0\n'.encode())
     print('moved by x: ' + x + ', y: ' + y)
     return HttpResponse('moved by x: ' + x + ', y: ' + y)
+#again
