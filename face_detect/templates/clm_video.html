@@ -233,8 +233,21 @@
 					requestAnimFrame(positionLoop);
 					var positions = ctrack.getCurrentPosition();
 					//console.log(positions);
-					document.getElementById('print_xy').innerHTML = '{' + parseInt(positions[27][0], 10) +' , ' + parseInt(positions[27][1], 10) + '}' +
-					'{' + parseInt(positions[32][0], 10) +' , ' + parseInt(positions[32][1], 10) + '}';
+					document.getElementById('print_xy').innerHTML = '{' + parseInt(positions[27][0], 10) +' , ' 
+					+ parseInt(positions[27][1], 10) + '}' 
+					+ '{' + parseInt(positions[32][0], 10) +' , ' 
+					+ parseInt(positions[32][1], 10) + '}';
+					var x = (parseInt(positions[27][0], 10) + parseInt(positions[32][0], 10))/2;
+					var y = (parseInt(positions[27][1], 10) + parseInt(positions[32][1], 10))/2;
+					// AJAX request to server's move_machine to send it coordinates
+					var xhttp = new XMLHttpRequest();
+					xhttp.onreadystatechange = function() {
+						if(this.readyState == 4 && this.status == 200){
+							console.log('sent request!')
+						}
+					}
+					xhttp.open("GET", "move_machine/?x="+x+"&y="+y);
+					xhttp.send();
 					// positions = [[x_0, y_0], [x_1,y_1], ... ]
 					// do something with the positions ...
 				}
