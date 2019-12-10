@@ -10,7 +10,7 @@ def index(request):
     global prev_y 
     prev_x = 0
     prev_y = 0
-    machine = serial.Serial('/dev/ttyUSB0', 115200, timeout=10)
+    # machine = serial.Serial('/dev/ttyUSB0', 115200, timeout=10)
     
     return render(request, 'clm_video.html')
 

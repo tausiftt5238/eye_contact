@@ -19,6 +19,7 @@
 		<title>Face tracker</title>
 		<meta charset="utf-8">
 		<link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css">
+		
 		<style>
 			@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);*/
 
@@ -55,9 +56,9 @@
 			}
 
 			#content {
-				margin-top : 70px;
-				margin-left : 100px;
-				margin-right : 100px;
+				margin-top : 0px;
+				margin-left : 25%;
+				margin-right : 0px;
 				max-width: 950px;
 			}
 
@@ -103,20 +104,21 @@
 		<div id="content">
 			<h2>Video Feed</h2>
 			<div id="container">
-				<video id="videoel" width="400" height="300" preload="auto" loop playsinline autoplay>
+				<video id="videoel" height="600" preload="auto" loop playsinline autoplay>
 				</video>
-				<canvas id="overlay" width="400" height="300"></canvas>
+				<canvas id="overlay" height="600"></canvas>
 			</div>
 			<br/>
-			<input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startVideo()" id="startbutton"></input>
-			<input id="another_button" type="button" value="printPosition" onclick="positionLoop();" /></input>
+			<input type="button" value="wait, loading video" onclick="startVideo()" id="startbutton"></input>
+			<!-- <input id="another_button" type="button" value="printPosition" onclick="positionLoop();" /></input> -->
+			<input type="button" onclick="draw_face()" value="Draw Face" id="draw_face"></input>
 			<div id="print_xy">
 				<p>
-					test text
+					{Left_eye X, Left_eye Y} {Right_eye X, Right_eye Y}
 				</p>
 			</div>
 			<script>
-
+				var draw = false;
 				var vid = document.getElementById('videoel');
 				var vid_width = vid.width;
 				var vid_height = vid.height;
@@ -129,6 +131,17 @@
 					var startbutton = document.getElementById('startbutton');
 					startbutton.value = "start";
 					startbutton.disabled = null;
+				}
+
+				function draw_face(){
+					draw = !draw;
+					var status = document.getElementById('draw_face');
+					if(status.value == 'Draw Face'){
+						document.getElementById('draw_face').value="Stop drawing";
+					}
+					else{
+						document.getElementById('draw_face').value="Draw Face";
+					}
 				}
 
 				var insertAltVideo = function(video) {
@@ -221,11 +234,10 @@
 					overlayCC.clearRect(0, 0, vid_width, vid_height);
 					//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
 					if (ctrack.getCurrentPosition()) {
-						ctrack.draw(overlay);
+						//if(!draw) continue;
+						if(draw)
+							ctrack.draw(overlay);
 					}
-
-
-
 				}
 				function positionLoop() {
 					//var ctracker = new clm.tracker();
