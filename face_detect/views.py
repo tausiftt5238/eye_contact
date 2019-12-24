@@ -7,44 +7,42 @@ import time
 def index(request):
     global machine 
     global prev_x
-    global prev_y 
+    global prev_y
+    global count 
     prev_x = 0
     prev_y = 0
-    # machine = serial.Serial('/dev/ttyUSB0', 115200, timeout=10)
-    
+    machine = serial.Serial('/dev/ttyUSB0', 115200, timeout=10)
+    count = 0
+
     return render(request, 'clm_video.html')
 
 def move_machine(request):
     global machine 
-
-    machine = serial.Serial('/dev/ttyUSB0', 115200, timeout=10)
-
-
+    global count 
     x = request.GET.get('x', '')
     y = request.GET.get('y', '')
 
-    global prev_x
-    global prev_y 
+    if count == 0:
+        # machine = serial.Serial('/dev/ttyUSB0', 115200, timeout=10)
+        
+        global prev_x
+        global prev_y 
 
-    print(x + " " + y)
+    # x = float(x) - 200
+    # y = float(y) - 140
 
-    # x is 200, y is 140 if the face is in middle of it 
-
-    x = float(x) - 200
-    y = float(y) - 140
+        # x = -(-float(x) + 380)/2
+        # y = -(-float(y) + 315)/2
     
-    print(str(x) + " " + str(y))
+        x = float(x)/2 - 270/2 - 60
+        y = float(y)/2 - 200/2 - 60# Because X,Y provided by the camera is double of what the xy plotter uses [probably 0.5mm]
 
-    alpha = 0.5
-
-    prev_x = alpha * prev_x + (1 - alpha) * x 
-    prev_y = alpha * prev_y + (1 - alpha) * y
-
-    # if prev_x > x + 5 or prev_x < x - 5:
-    #     prev_x = x
-    # if prev_y > y + 5 or prev_y < y - 5:
-    #     prev_y = y
-    machine.write(('G0 X'+str(prev_x)+' Y' + str(prev_y) + '\n').encode())
-    # print('moved by x: ' + str(x) + ', y: ' + str(y))
+        print(str(x) + " " + str(y))
+    
+        machine.write(('G91\n').encode())
+        machine.write(('G21\n').encode())
+        machine.write(('G0 X'+str(x)+' Y' + str(y) + '\n').encode())
+    count = (count + 1) % 10
+    # machine.write(('G0 X'+str(x)+' Y' + str(y) + '\n').encode())
     return HttpResponse('moved by x: ' + str(x) + ', y: ' + str(y))
 #again
